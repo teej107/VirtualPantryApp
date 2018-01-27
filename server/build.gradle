@@ -4,12 +4,9 @@ apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
 
 buildscript {
-    ext {
-        spring_boot_version = '1.5.9.RELEASE'
-    }
 
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_version")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.9.RELEASE")
         classpath("org.jetbrains.kotlin:kotlin-allopen:$kotlin_version")
     }
 }
@@ -26,6 +23,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-data-jpa")
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+    compile("org.springframework.boot:spring-boot-starter-security")
     compile("org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version")
     compile("org.jetbrains.kotlin:kotlin-reflect:$kotlin_version")
     runtime('mysql:mysql-connector-java')

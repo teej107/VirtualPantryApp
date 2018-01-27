@@ -1,0 +1,42 @@
+.recipe-page {
+  border-radius: 10px;
+  box-shadow: 0 0 10px 5px lightgray;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+  margin: 0 auto;
+  max-width: 8.5in;
+  min-width: 320px;
+  overflow: auto;
+  padding: 20px; }
+  .recipe-page img {
+    display: block;
+    width: 100%; }
+  .recipe-page h1 {
+    text-align: center; }
+
+.iframe-container {
+  box-sizing: border-box;
+  height: 0;
+  padding-bottom: 56.25%;
+  position: relative;
+  width: 100%; }
+  .iframe-container iframe {
+    border: none;
+    box-sizing: border-box;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%; }
+
+@media print {
+  @page {
+    size: portrait; }
+  .iframe-container {
+    display: none; }
+
+  .recipe-page {
+    box-shadow: none;
+    border-radius: 0; } }
+
+/*# sourceMappingURL=App.css.map */

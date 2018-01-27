@@ -1,4 +1,3 @@
 rootProject.name = 'Virtual Pantry App'
 include 'server'
-include 'web'
 
