@@ -5,4 +5,7 @@ import org.springframework.data.repository.CrudRepository
 /**
  * Created by teej107 on 1/19/2018.
  */
-interface RecipeRepository : CrudRepository<Recipe, Long>
+interface RecipeRepository : CrudRepository<Recipe, Long> {
+
+
+}
