@@ -1,57 +1,34 @@
 import React, {Component} from 'react';
-import {
-    Navbar,
-    NavbarBrand,
-    NavbarToggler,
-    Collapse,
-    NavItem,
-    NavLink,
-    Nav,
-    Form,
-    FormGroup,
-    Button,
-    Input,
-    InputGroup,
-    InputGroupAddon
-} from 'reactstrap';
+import {Navbar, Nav, NavItem, Form, FormGroup, Button, FormControl} from 'react-bootstrap/lib';
 
 export default class MenuBar extends Component {
 
-    constructor() {
-        super();
-        this.state = {collapsed: true};
-    }
-
-    toggleNavbar = () => {
-        this.setState({
-            collapsed: !this.state.collapsed
-        });
-    };
-
     render() {
         return (
-            <Navbar color="light" expand="md" light>
-                <NavbarBrand href="/">Virtual Pantry</NavbarBrand>
-                <NavbarToggler onClick={this.toggleNavbar}/>
-                <Collapse isOpen={!this.state.collapsed} navbar>
-                    <Nav navbar>
+            <Navbar collapseOnSelect>
+                <Navbar.Header>
+                    <Navbar.Brand>
+                        <a href='/'>Virtual Pantry</a>
+                    </Navbar.Brand>
+                    <Navbar.Toggle/>
+                </Navbar.Header>
+                <Navbar.Collapse>
+                    <Nav>
                         <NavItem>
-                            <NavLink href="#">Recipes</NavLink>
+                            Recipes
                         </NavItem>
                     </Nav>
-                    <Nav navbar className="ml-auto">
-                        <Form inline className="navbar-right">
-                            <InputGroup>
-                                <Input placeholder='Search'/>
-                                {/* className used due to react error:
-                                    https://github.com/reactstrap/reactstrap/issues/770#issuecomment-356472250 */}
-                                <InputGroupAddon className='input-group-append'>
+                    <Nav pullRight>
+                        <NavItem>
+                            <Form inline>
+                                <FormGroup>
+                                    <FormControl type="text" placeholder="Search"/>
                                     <Button color="primary">@</Button>
-                                </InputGroupAddon>
-                            </InputGroup>
-                        </Form>
+                                </FormGroup>
+                            </Form>
+                        </NavItem>
                     </Nav>
-                </Collapse>
+                </Navbar.Collapse>
             </Navbar>
         );
     }

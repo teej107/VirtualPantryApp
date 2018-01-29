@@ -2,10 +2,11 @@ import React, {Component} from 'react';
 import RecipePage from "../component/RecipePage";
 import MenuBar from '../component/MenuBar';
 import RecipeListItem from "../component/RecipeListItem";
-import {Container} from 'reactstrap';
+
 import axios from 'axios';
 
-import 'bootstrap/dist/css/bootstrap.css';
+//defined in html file. Doesn't theme properly
+//import 'bootstrap/dist/css/bootstrap.css';
 
 import './App.css';
 
@@ -58,9 +59,9 @@ export default class App extends Component {
         return (
             <div>
                 <MenuBar/>
-                <Container>
+                <div className="container">
                     {this.state.currentView}
-                </Container>
+                </div>
             </div>
         );
     }

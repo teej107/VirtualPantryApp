@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Row, Col} from 'reactstrap';
 
 export default class RecipeList extends Component {
 
