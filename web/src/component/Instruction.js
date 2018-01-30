@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {copyFromObject} from "../Utilities";
+import {copyFromObject, str} from "../app/Utilities";
 
 const keys = Object.freeze([
     'description',
@@ -14,9 +14,7 @@ export default class Instruction extends Component {
 
     render() {
         return (
-            <div>
-                <p>{this.state.description}</p>
-            </div>
+            <p className={str(this.props.className)}>{this.state.description}</p>
         );
     }
 }

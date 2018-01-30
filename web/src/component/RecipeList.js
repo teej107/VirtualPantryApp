@@ -1,10 +1,15 @@
 import React, {Component} from 'react';
+import {Row} from 'reactstrap';
+import {str} from '../app/Utilities';
 
 export default class RecipeList extends Component {
 
-    constructor() {
-        super();
-        this.state = {items: []};
+    constructor(props) {
+        super(props);
+        this.state = {
+            items: [],
+            columns: props.columns || 3
+        };
     }
 
     setItems(items) {
@@ -12,11 +17,17 @@ export default class RecipeList extends Component {
     }
 
     render() {
+        const children = this.state.items.map((item, i) => {
+            return (
+                <div key={i} className="col-lg-4 col-md-6 col-sm-12">
+                    {item}
+                </div>);
+        });
 
         return (
-            <div>
-
-            </div>
+            <Row className={str(this.props.className)}>
+                {children}
+            </Row>
         );
     }
 }

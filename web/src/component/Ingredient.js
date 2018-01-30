@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {copyFromObject} from "../Utilities";
+import {copyFromObject, str} from "../app/Utilities";
 
 const keys = Object.freeze([
     'amount',
@@ -16,7 +16,7 @@ export default class Ingredient extends Component {
 
     render() {
         return (
-            <p>{`${this.state.amount} ${this.state.measurement} ${this.state.name}`}</p>
+            <p className={str(this.props.className)}>{`${this.state.amount} ${this.state.measurement} ${this.state.name}`}</p>
         );
     }
 }

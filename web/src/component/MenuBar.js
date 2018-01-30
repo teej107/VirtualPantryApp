@@ -1,34 +1,58 @@
 import React, {Component} from 'react';
-import {Navbar, Nav, NavItem, Form, FormGroup, Button, FormControl} from 'react-bootstrap/lib';
+import {
+    Container,
+    Navbar,
+    NavbarBrand,
+    NavbarToggler,
+    Collapse,
+    NavItem,
+    NavLink,
+    Nav,
+    Form,
+    Input,
+    InputGroup,
+    InputGroupAddon
+} from 'reactstrap';
 
 export default class MenuBar extends Component {
 
+    constructor() {
+        super();
+        this.state = {collapsed: true};
+    }
+
+    toggleNavbar = () => {
+        this.setState({
+            collapsed: !this.state.collapsed
+        });
+    };
+
     render() {
         return (
-            <Navbar collapseOnSelect>
-                <Navbar.Header>
-                    <Navbar.Brand>
-                        <a href='/'>Virtual Pantry</a>
-                    </Navbar.Brand>
-                    <Navbar.Toggle/>
-                </Navbar.Header>
-                <Navbar.Collapse>
-                    <Nav>
-                        <NavItem>
-                            Recipes
-                        </NavItem>
-                    </Nav>
-                    <Nav pullRight>
-                        <NavItem>
-                            <Form inline>
-                                <FormGroup>
-                                    <FormControl type="text" placeholder="Search"/>
-                                    <Button color="primary">@</Button>
-                                </FormGroup>
+            <Navbar color="light" expand="md" light>
+                <Container>
+                    <NavbarBrand href="/">Virtual Pantry</NavbarBrand>
+                    <NavbarToggler onClick={this.toggleNavbar}/>
+                    <Collapse isOpen={!this.state.collapsed} navbar>
+                        <Nav navbar>
+                            <NavItem>
+                                <NavLink href="#">Recipes</NavLink>
+                            </NavItem>
+                        </Nav>
+                        <Nav navbar className="ml-auto">
+                            <Form inline className="navbar-right">
+                                <InputGroup>
+                                    <Input placeholder='Search' onInput={this.props.onInput}/>
+                                    {/* className used due to react error:
+                                    https://github.com/reactstrap/reactstrap/issues/770#issuecomment-356472250 */}
+                                    <InputGroupAddon className='input-group-append'>
+                                        <i className="fa fa-search input-group-text"/>
+                                    </InputGroupAddon>
+                                </InputGroup>
                             </Form>
-                        </NavItem>
-                    </Nav>
-                </Navbar.Collapse>
+                        </Nav>
+                    </Collapse>
+                </Container>
             </Navbar>
         );
     }

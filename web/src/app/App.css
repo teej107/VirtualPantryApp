@@ -1,3 +1,6 @@
+body {
+  padding-bottom: 30px; }
+
 .iframe-container {
   box-sizing: border-box;
   height: 0;
@@ -13,10 +16,27 @@
     top: 0;
     width: 100%; }
 
+.recipe-page {
+  max-width: 8.5in; }
+  .recipe-page img {
+    max-height: 4in; }
+
+.recipe-view {
+  margin-bottom: 1rem; }
+  .recipe-view img {
+    height: 250px;
+    object-fit: scale-down; }
+  @media (max-width: 400px) {
+    .recipe-view img {
+      height: 175px; } }
+
 @media print {
   @page {
     size: portrait; }
-  .iframe-container {
+  body {
+    padding-bottom: 0; }
+
+  .iframe-container, .navbar {
     display: none; } }
 
 /*# sourceMappingURL=App.css.map */

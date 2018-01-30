@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import {copyFromObject} from '../Utilities';
+import {copyFromObject} from '../app/Utilities';
 import Ingredient from "./Ingredient";
 import Instruction from "./Instruction";
+import {str} from '../app/Utilities';
 
 const keys = Object.freeze([
     "title",
@@ -27,16 +28,21 @@ export default class RecipePage extends Component {
     }
 
     render() {
-        const ingredients = (this.state.ingredients || []).map(obj =>
-            <Ingredient key={obj} amount={obj.amount} measurement={obj.measurement}/>
-        );
+        const ingredients = (this.state.ingredients || []).map(obj => (
+            <li key={Math.random()} className="list-group-item">
+                <Ingredient amount={obj.amount}
+                            measurement={obj.measurement}/>
+            </li>
+        ));
 
-        const instructions = (this.state.instructions || []).map((obj) =>
-            <Instruction key={obj} description={obj.description}/>
-        );
+        const instructions = (this.state.instructions || []).map((obj) => (
+            <li key={obj.description} className="list-group-item">
+                <Instruction description={obj.description}/>
+            </li>
+        ));
 
         return (
-            <div className="recipe-page">
+            <div className={str(this.props.className, "recipe-page")}>
                 <h1>{this.state.title}</h1>
                 <img src={this.state.image} alt={this.state.title}/>
                 <div className="iframe-container">
@@ -45,11 +51,11 @@ export default class RecipePage extends Component {
                 <h2>Description</h2>
                 <p>{this.state.description}</p>
                 <h2>Ingredients</h2>
-                <ul>
+                <ul className="list-group">
                     {ingredients}
                 </ul>
                 <h2>Instructions</h2>
-                <ol>
+                <ol className="list-group">
                     {instructions}
                 </ol>
             </div>

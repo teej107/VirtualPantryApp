@@ -1,18 +1,16 @@
 import React, {Component} from 'react';
 import RecipePage from "../component/RecipePage";
 import MenuBar from '../component/MenuBar';
+import RecipeList from '../component/RecipeList';
 import RecipeListItem from "../component/RecipeListItem";
-
+import {Container} from 'reactstrap';
 import axios from 'axios';
 
-//defined in html file. Doesn't theme properly
-//import 'bootstrap/dist/css/bootstrap.css';
-
+import 'font-awesome/css/font-awesome.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 const CONFIG = {
-    baseURL: 'http://localhost:8080/api/',
-    headers: {'Content-Type': 'application/hal+json;charset=UTF-8'},
     transformResponse: [(data) => JSON.parse(data)]
 };
 
@@ -30,38 +28,55 @@ export default class App extends Component {
 
     constructor() {
         super();
-        this.state = {
-            currentView: null
-        };
-        this.recipePage = <RecipePage/>;
+        this.state = {showingRecipe: false};
+        this.recipeViewData = [];
     }
 
-    loadRecipeList(callback = EMPTY_FUNCTION) {
-        REQUEST.get('recipelist').then(response => callback(response.data));
+    loadRecipes(callback = EMPTY_FUNCTION) {
+        REQUEST.get('recipelist', {
+            baseURL: 'http://localhost:8080/api/',
+            headers: {'Content-Type': 'application/hal+json;charset=UTF-8'}
+        }).then(response => callback(response.data));
     }
 
     componentDidMount() {
-        this.loadRecipeList((recipeList) => {
-            const recipeListItems = recipeList.map(recipeView => {
-                const handleClick = () => {
-
-                };
-                return <RecipeListItem key={recipeView.href} view={recipeView} onClick={handleClick()}/>
-            });
-
-            this.setState({currentView: recipeListItems})
+        this.loadRecipes((recipeViewArr) => {
+            const recipeListItems = recipeViewArr.map(recipeView => this.recipeViewToComponent(recipeView));
+            this.recipeViewData = recipeViewArr;
+            this.recipeViewList.setItems(recipeListItems);
         });
     }
 
+    recipeViewToComponent(recipeView) {
+        const handleClick = () => {
+            REQUEST.get(recipeView.href).then(response => {
+                this.recipePage.setRecipe(response.data);
+                this.setState({showingRecipe: true});
+            });
+        };
+        return <RecipeListItem key={recipeView.href} view={recipeView} onClick={handleClick}/>
+    }
+
+    onSearchInput = (event) => {
+        const filter = event.currentTarget.value;
+        const filteredList = this.recipeViewData.filter(view =>
+            view.title.toLowerCase().indexOf(filter.toLowerCase()) !== -1);
+
+        this.recipeViewList.setItems(filteredList.map(recipeView => this.recipeViewToComponent(recipeView)));
+    };
 
     render() {
+        const showingRecipe = (bool) => bool ? "" : "d-none";
 
         return (
             <div>
-                <MenuBar/>
-                <div className="container">
-                    {this.state.currentView}
-                </div>
+                <MenuBar onInput={this.onSearchInput}/>
+                <Container>
+                    <RecipeList ref={input => this.recipeViewList = input}
+                                className={showingRecipe(!this.state.showingRecipe)}/>
+                    <RecipePage ref={input => this.recipePage = input}
+                                className={showingRecipe(this.state.showingRecipe)}/>
+                </Container>
             </div>
         );
     }

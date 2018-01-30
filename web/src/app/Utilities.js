@@ -4,4 +4,8 @@ function copyFromObject(array, obj) {
     return newObj;
 }
 
-export {copyFromObject};
+function str(truthy, append = "") {
+    return truthy ? truthy + " " + append : append;
+}
+
+export {copyFromObject, str};
