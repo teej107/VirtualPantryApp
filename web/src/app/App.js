@@ -51,6 +51,7 @@ export default class App extends Component {
         const handleClick = () => {
             REQUEST.get(recipeView.href).then(response => {
                 this.recipePage.setRecipe(response.data);
+                this.menuBar.clearSearch();
                 this.setState({showingRecipe: true});
             });
         };
@@ -59,8 +60,7 @@ export default class App extends Component {
 
     onSearchInput = (event) => {
         const filter = event.currentTarget.value;
-        const filteredList = this.recipeViewData.filter(view =>
-            view.title.toLowerCase().indexOf(filter.toLowerCase()) !== -1);
+        const filteredList = this.recipeViewData.filter(view => view.title.toLowerCase().indexOf(filter.toLowerCase()) !== -1);
 
         this.recipeViewList.setItems(filteredList.map(recipeView => this.recipeViewToComponent(recipeView)));
     };
@@ -70,7 +70,8 @@ export default class App extends Component {
 
         return (
             <div>
-                <MenuBar onInput={this.onSearchInput}/>
+                <MenuBar ref={input => this.menuBar = input}
+                         onInput={this.onSearchInput}/>
                 <Container>
                     <RecipeList ref={input => this.recipeViewList = input}
                                 className={showingRecipe(!this.state.showingRecipe)}/>

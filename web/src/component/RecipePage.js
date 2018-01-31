@@ -3,6 +3,7 @@ import {copyFromObject} from '../app/Utilities';
 import Ingredient from "./Ingredient";
 import Instruction from "./Instruction";
 import {str} from '../app/Utilities';
+import {Row, Col} from 'reactstrap';
 
 const keys = Object.freeze([
     "title",
@@ -41,23 +42,31 @@ export default class RecipePage extends Component {
             </li>
         ));
 
+        const mediaClass = "col-lg-8 col-md-10 col-sm-12 mx-auto";
+
         return (
-            <div className={str(this.props.className, "recipe-page")}>
-                <h1>{this.state.title}</h1>
-                <img src={this.state.image} alt={this.state.title}/>
-                <div className="iframe-container">
-                    <iframe src={this.state.video} allowFullScreen/>
+            <div className={str(this.props.className, "recipe-page mx-auto")}>
+                <h1 className="text-center">{this.state.title}</h1>
+                <Row>
+                    <Col className={mediaClass}>
+                        <img src={this.state.image} alt={this.state.title}/>
+                        <div className="iframe-container mt-1">
+                            <iframe src={this.state.video} allowFullScreen/>
+                        </div>
+                    </Col>
+                </Row>
+                <div className="mt-2 mt-sm-4">
+                    <h2>Description</h2>
+                    <p>{this.state.description}</p>
+                    <h2>Ingredients</h2>
+                    <ul className="list-group">
+                        {ingredients}
+                    </ul>
+                    <h2>Instructions</h2>
+                    <ol className="list-group">
+                        {instructions}
+                    </ol>
                 </div>
-                <h2>Description</h2>
-                <p>{this.state.description}</p>
-                <h2>Ingredients</h2>
-                <ul className="list-group">
-                    {ingredients}
-                </ul>
-                <h2>Instructions</h2>
-                <ol className="list-group">
-                    {instructions}
-                </ol>
             </div>
         );
     }

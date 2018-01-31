@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import ReactDOM from 'react-dom';
 import {
     Container,
     Navbar,
@@ -22,14 +23,16 @@ export default class MenuBar extends Component {
     }
 
     toggleNavbar = () => {
-        this.setState({
-            collapsed: !this.state.collapsed
-        });
+        this.setState({collapsed: !this.state.collapsed});
     };
+
+    clearSearch() {
+        ReactDOM.findDOMNode(this.search).value = "";
+    }
 
     render() {
         return (
-            <Navbar color="light" expand="md" light>
+            <Navbar color="light" expand="md" light className="shadow-bottom">
                 <Container>
                     <NavbarBrand href="/">Virtual Pantry</NavbarBrand>
                     <NavbarToggler onClick={this.toggleNavbar}/>
@@ -42,7 +45,8 @@ export default class MenuBar extends Component {
                         <Nav navbar className="ml-auto">
                             <Form inline className="navbar-right">
                                 <InputGroup>
-                                    <Input placeholder='Search' onInput={this.props.onInput}/>
+                                    <Input ref={input => this.search = input} placeholder='Search'
+                                           onInput={this.props.onInput}/>
                                     {/* className used due to react error:
                                     https://github.com/reactstrap/reactstrap/issues/770#issuecomment-356472250 */}
                                     <InputGroupAddon className='input-group-append'>

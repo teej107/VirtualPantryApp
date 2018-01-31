@@ -8,18 +8,19 @@ body {
   position: relative;
   width: 100%; }
   .iframe-container iframe {
-    border: none;
     box-sizing: border-box;
+    background-color: lightgray;
+    border: none;
     height: 100%;
     left: 0;
     position: absolute;
     top: 0;
     width: 100%; }
 
-.recipe-page {
-  max-width: 8.5in; }
-  .recipe-page img {
-    max-height: 4in; }
+.recipe-page img {
+  max-height: 400px;
+  width: 100%;
+  object-fit: contain; }
 
 .recipe-view {
   margin-bottom: 1rem; }
@@ -29,6 +30,10 @@ body {
   @media (max-width: 400px) {
     .recipe-view img {
       height: 175px; } }
+
+.shadow-bottom {
+  box-shadow: 0 4px 2px -2px lightgray;
+  margin-bottom: 8px; }
 
 @media print {
   @page {
