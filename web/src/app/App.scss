@@ -15,15 +15,19 @@ body {
   width: 100%; //16x9 ratio
 
   iframe {
-    box-sizing: border-box;
     background-color: lightgray;
     border: none;
+    box-sizing: border-box;
     height: 100%;
     left: 0;
     position: absolute;
     top: 0;
     width: 100%;
   }
+}
+
+.editable-component > * {
+  margin: 0;
 }
 
 .recipe-page {

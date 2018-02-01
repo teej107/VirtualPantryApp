@@ -47,7 +47,7 @@ export default class MenuBar extends Component {
                                 <InputGroup>
                                     <Input ref={input => this.search = input} placeholder='Search'
                                            onInput={this.props.onInput}/>
-                                    {/* className used due to react error:
+                                    {/* className used due to react error/inconsistencies with documentation:
                                     https://github.com/reactstrap/reactstrap/issues/770#issuecomment-356472250 */}
                                     <InputGroupAddon className='input-group-append'>
                                         <i className="fa fa-search input-group-text"/>

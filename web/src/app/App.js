@@ -11,6 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 const CONFIG = {
+    baseURL: 'http://localhost:8080/api/',
     transformResponse: [(data) => JSON.parse(data)]
 };
 
@@ -21,9 +22,6 @@ const TRANSFORM_RESPONSE = (...callbacks) => {
     }
 };
 
-const EMPTY_FUNCTION = () => {
-};
-
 export default class App extends Component {
 
     constructor() {
@@ -32,15 +30,10 @@ export default class App extends Component {
         this.recipeViewData = [];
     }
 
-    loadRecipes(callback = EMPTY_FUNCTION) {
-        REQUEST.get('recipelist', {
-            baseURL: 'http://localhost:8080/api/',
-            headers: {'Content-Type': 'application/hal+json;charset=UTF-8'}
-        }).then(response => callback(response.data));
-    }
-
     componentDidMount() {
-        this.loadRecipes((recipeViewArr) => {
+        REQUEST.get('recipelist', {
+            headers: {'Content-Type': 'application/hal+json;charset=UTF-8'}
+        }).then(response => response.data).then(recipeViewArr => {
             const recipeListItems = recipeViewArr.map(recipeView => this.recipeViewToComponent(recipeView));
             this.recipeViewData = recipeViewArr;
             this.recipeViewList.setItems(recipeListItems);
@@ -50,11 +43,23 @@ export default class App extends Component {
     recipeViewToComponent(recipeView) {
         const handleClick = () => {
             REQUEST.get(recipeView.href).then(response => {
-                this.recipePage.setRecipe(response.data);
-                this.menuBar.clearSearch();
-                this.setState({showingRecipe: true});
+                const ingredientHref = response.data.ingredients.map(
+                    ingredient => REQUEST.get(ingredient._links.measurement.href));
+
+                axios.all(ingredientHref).then(responseArr => {
+                    responseArr.forEach(response2 => {
+                        response.data.ingredients.forEach(ingredient => {
+                            ingredient.measurement = response2.data.abbreviation;
+                        });
+                    });
+
+                    this.recipePage.setRecipe(response.data);
+                    this.menuBar.clearSearch();
+                    this.setState({showingRecipe: true});
+                });
             });
         };
+
         return <RecipeListItem key={recipeView.href} view={recipeView} onClick={handleClick}/>
     }
 
@@ -67,7 +72,6 @@ export default class App extends Component {
 
     render() {
         const showingRecipe = (bool) => bool ? "" : "d-none";
-
         return (
             <div>
                 <MenuBar ref={input => this.menuBar = input}

@@ -4,8 +4,16 @@ function copyFromObject(array, obj) {
     return newObj;
 }
 
-function str(truthy, append = "") {
+function toClassName(truthy, append) {
     return truthy ? truthy + " " + append : append;
 }
 
-export {copyFromObject, str};
+function toArray(obj) {
+    return obj instanceof Array ? obj : [obj];
+}
+
+function copyArray(array) {
+    return array instanceof Array ? array.slice() : [array];
+}
+
+export {copyFromObject, toClassName, copyArray, toArray};

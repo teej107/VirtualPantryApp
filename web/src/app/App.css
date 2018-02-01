@@ -8,14 +8,17 @@ body {
   position: relative;
   width: 100%; }
   .iframe-container iframe {
-    box-sizing: border-box;
     background-color: lightgray;
     border: none;
+    box-sizing: border-box;
     height: 100%;
     left: 0;
     position: absolute;
     top: 0;
     width: 100%; }
+
+.editable-component > * {
+  margin: 0; }
 
 .recipe-page img {
   max-height: 400px;

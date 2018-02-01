@@ -22,9 +22,9 @@ class DatabaseLoader
 
         fun createIngredient(name: String, measurement: Measurement, amount: Double): Ingredient {
             val ingredient = Ingredient()
-            ingredient.name = "Flour"
+            ingredient.name = name
             ingredient.measurement = measurement
-            ingredient.amount = 2.0;
+            ingredient.amount = amount;
             return ingredientRepo.save(ingredient)
         }
 

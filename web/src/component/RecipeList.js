@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 import {Row} from 'reactstrap';
-import {str} from '../app/Utilities';
+import {toClassName} from '../app/Utilities';
 
 export default class RecipeList extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            items: [],
-            columns: props.columns || 3
+            items: []
         };
     }
 
@@ -25,7 +24,7 @@ export default class RecipeList extends Component {
         });
 
         return (
-            <Row className={str(this.props.className)}>
+            <Row className={toClassName(this.props.className)}>
                 {children}
             </Row>
         );
