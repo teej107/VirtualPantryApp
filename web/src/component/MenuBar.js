@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
+import {connect} from 'react-redux';
+import {setMenuBarCollapsed} from "../redux/reducer/menuBarReducer";
 import {
     Container,
     Navbar,
@@ -15,16 +17,21 @@ import {
     InputGroupAddon
 } from 'reactstrap';
 
-export default class MenuBar extends Component {
-
-    constructor() {
-        super();
-        this.state = {collapsed: true};
-    }
-
-    toggleNavbar = () => {
-        this.setState({collapsed: !this.state.collapsed});
+const mapStateToProps = (store, props) => {
+    return {
+        collapsed: store.menuBar.collapsed,
+        ...props
     };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        setCollapsed: (bool) => dispatch(setMenuBarCollapsed(bool)),
+        ...props
+    };
+};
+
+class MenuBar extends Component {
 
     clearSearch() {
         ReactDOM.findDOMNode(this.search).value = "";
@@ -35,8 +42,8 @@ export default class MenuBar extends Component {
             <Navbar color="light" expand="md" light className="shadow-bottom">
                 <Container>
                     <NavbarBrand href="/">Virtual Pantry</NavbarBrand>
-                    <NavbarToggler onClick={this.toggleNavbar}/>
-                    <Collapse isOpen={!this.state.collapsed} navbar>
+                    <NavbarToggler onClick={this.props.setCollapsed.bind(null, !this.props.collapsed)}/>
+                    <Collapse isOpen={!this.props.collapsed} navbar>
                         <Nav navbar>
                             <NavItem>
                                 <NavLink href="#">Recipes</NavLink>
@@ -61,3 +68,10 @@ export default class MenuBar extends Component {
         );
     }
 }
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps,
+    null,
+    {withRef: true}
+)(MenuBar);

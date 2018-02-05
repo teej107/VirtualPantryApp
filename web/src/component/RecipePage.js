@@ -5,6 +5,7 @@ import Instruction from "./Instruction";
 import EditableComponent from './EditableComponent';
 import {toClassName} from '../app/Utilities';
 import {Row, Col, InputGroup, InputGroupAddon, Input} from 'reactstrap';
+import {connect} from 'react-redux';
 
 const keys = Object.freeze([
     "title",
@@ -14,23 +15,23 @@ const keys = Object.freeze([
     "ingredients",
     "instructions"]);
 
-export default class RecipePage extends Component {
+const mapStateToProps = (store, props) => {
+    return {
+        ...store.recipe.recipe,
+        ...store.recipe.editing,
+        ...props
+    };
+};
 
-    constructor(props) {
-        super(props);
-        this.state = copyFromObject(keys, props);
-    }
-
-    setRecipe(obj) {
-        this.setState(copyFromObject(keys, obj));
-    }
+class RecipePage extends Component {
 
     hasRecipe() {
-        return this.state.title && this.state.description;
+        return this.props.title && this.props.description;
     }
 
     render() {
-        const ingredients = (this.state.ingredients || []).map(obj => (
+
+        const ingredients = (this.props.ingredients || []).map(obj => (
             <li key={Math.random()} className="list-group-item">
                 <Ingredient amount={obj.amount}
                             measurement={obj.measurement}
@@ -38,7 +39,7 @@ export default class RecipePage extends Component {
             </li>
         ));
 
-        const instructions = (this.state.instructions || []).map((obj, i) => (
+        const instructions = (this.props.instructions || []).map((obj, i) => (
             <li key={obj.description} className="list-group-item">
                 <Instruction description={obj.description} index={i}/>
             </li>
@@ -47,8 +48,8 @@ export default class RecipePage extends Component {
         return (
             <div ref={ref => this.parent = ref} className={toClassName(this.props.className, "recipe-page mx-auto")}>
                 <EditableComponent className="pb-2">
-                    <h1 className="text-center">{this.state.title}</h1>
-                    <Row editor="true">
+                    <h1 className="text-center">{this.props.title}</h1>
+                    <Row editor>
                         <Col className="col-6 mx-auto">
                             <InputGroup size="lg">
                                 <InputGroupAddon className="input-group-prepend">
@@ -61,15 +62,15 @@ export default class RecipePage extends Component {
                 </EditableComponent>
                 <Row>
                     <Col className="col-lg-8 col-md-10 col-sm-12 mx-auto">
-                        <img src={this.state.image} alt={this.state.title}/>
+                        <img src={this.props.image} alt={this.props.title}/>
                         <div className="iframe-container mt-1">
-                            <iframe src={this.state.video} allowFullScreen/>
+                            <iframe src={this.props.video} allowFullScreen/>
                         </div>
                     </Col>
                 </Row>
                 <div className="mt-2 mt-sm-4">
                     <h2>Description</h2>
-                    <p>{this.state.description}</p>
+                    <p>{this.props.description}</p>
                     <h2>Ingredients</h2>
                     <ul className="list-group">
                         {ingredients}
@@ -83,3 +84,7 @@ export default class RecipePage extends Component {
         );
     }
 }
+
+export default connect(
+    mapStateToProps
+)(RecipePage);

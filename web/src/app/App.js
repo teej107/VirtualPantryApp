@@ -2,8 +2,10 @@ import React, {Component} from 'react';
 import RecipePage from "../component/RecipePage";
 import MenuBar from '../component/MenuBar';
 import RecipeList from '../component/RecipeList';
-import RecipeListItem from "../component/RecipeListItem";
 import {Container} from 'reactstrap';
+import {connect} from 'react-redux';
+import {setRecipe} from "../redux/reducer/recipeReducer";
+import {setRecipeListItems} from "../redux/reducer/recipeListViewReducer";
 import axios from 'axios';
 
 import 'font-awesome/css/font-awesome.min.css';
@@ -19,29 +21,47 @@ const REQUEST = axios.create(CONFIG);
 const TRANSFORM_RESPONSE = (...callbacks) => {
     return {
         transformResponse: CONFIG.transformResponse.concat(callbacks)
-    }
+    };
 };
 
-export default class App extends Component {
+const mapStateToProps = (store, props) => {
+    return {
+        recipe: store.recipe.recipe,
+        ...props
+    };
+};
 
-    constructor() {
-        super();
-        this.state = {showingRecipe: false};
-        this.recipeViewData = [];
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        setRecipe: (recipe) => dispatch(setRecipe(recipe)),
+        setRecipeListView: (recipeListItems) => dispatch(setRecipeListItems(recipeListItems))
+    };
+};
+
+class App extends Component {
+
+    constructor(props) {
+        super(props);
+        this.recipeListItems = [];
     }
 
     componentDidMount() {
         REQUEST.get('recipelist', {
             headers: {'Content-Type': 'application/hal+json;charset=UTF-8'}
         }).then(response => response.data).then(recipeViewArr => {
-            const recipeListItems = recipeViewArr.map(recipeView => this.recipeViewToComponent(recipeView));
-            this.recipeViewData = recipeViewArr;
-            this.recipeViewList.setItems(recipeListItems);
+            const recipeListItems = recipeViewArr.map(recipeView => {
+                return {
+                    recipeView,
+                    onClick: this.recipeViewOnClick(recipeView)
+                };
+            });
+            this.recipeListItems = recipeListItems;
+            this.props.setRecipeListView(recipeListItems);
         });
     }
 
-    recipeViewToComponent(recipeView) {
-        const handleClick = () => {
+    recipeViewOnClick(recipeView) {
+        return () => {
             REQUEST.get(recipeView.href).then(response => {
                 const ingredientHref = response.data.ingredients.map(
                     ingredient => REQUEST.get(ingredient._links.measurement.href));
@@ -52,22 +72,19 @@ export default class App extends Component {
                             ingredient.measurement = response2.data.abbreviation;
                         });
                     });
-
-                    this.recipePage.setRecipe(response.data);
-                    this.menuBar.clearSearch();
-                    this.setState({showingRecipe: true});
+                    this.menuBar.getWrappedInstance().clearSearch();
+                    this.props.setRecipe(response.data);
                 });
             });
         };
-
-        return <RecipeListItem key={recipeView.href} view={recipeView} onClick={handleClick}/>
     }
 
     onSearchInput = (event) => {
         const filter = event.currentTarget.value;
-        const filteredList = this.recipeViewData.filter(view => view.title.toLowerCase().indexOf(filter.toLowerCase()) !== -1);
+        const filteredList = this.recipeListItems
+            .filter(item => item.recipeView.title.toLowerCase().indexOf(filter.toLowerCase()) !== -1);
 
-        this.recipeViewList.setItems(filteredList.map(recipeView => this.recipeViewToComponent(recipeView)));
+        this.props.setRecipeListView(filteredList);
     };
 
     render() {
@@ -78,11 +95,16 @@ export default class App extends Component {
                          onInput={this.onSearchInput}/>
                 <Container>
                     <RecipeList ref={input => this.recipeViewList = input}
-                                className={showingRecipe(!this.state.showingRecipe)}/>
+                                className={showingRecipe(Boolean(!this.props.recipe))}/>
                     <RecipePage ref={input => this.recipePage = input}
-                                className={showingRecipe(this.state.showingRecipe)}/>
+                                className={showingRecipe(Boolean(this.props.recipe))}/>
                 </Container>
             </div>
         );
     }
 }
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(App);
