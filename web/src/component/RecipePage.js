@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {copyFromObject} from '../app/Utilities';
 import Ingredient from "./Ingredient";
 import Instruction from "./Instruction";
 import EditableComponent from './EditableComponent';
@@ -71,11 +70,11 @@ class RecipePage extends Component {
                 <div className="mt-2 mt-sm-4">
                     <h2>Description</h2>
                     <p>{this.props.description}</p>
-                    <h2>Ingredients</h2>
+                    <h2 className="mt-1">Ingredients</h2>
                     <ul className="list-group">
                         {ingredients}
                     </ul>
-                    <h2>Instructions</h2>
+                    <h2 className="mt-1">Instructions</h2>
                     <ol className="list-group">
                         {instructions}
                     </ol>

@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
+import {withRouter, Route} from 'react-router-dom';
 import RecipePage from "../component/RecipePage";
 import MenuBar from '../component/MenuBar';
 import RecipeList from '../component/RecipeList';
 import {Container} from 'reactstrap';
 import {connect} from 'react-redux';
 import {setRecipe} from "../redux/reducer/recipeReducer";
+import {home, recipes} from '../data/History';
 import {setRecipeListItems} from "../redux/reducer/recipeListViewReducer";
 import axios from 'axios';
 
@@ -72,39 +74,36 @@ class App extends Component {
                             ingredient.measurement = response2.data.abbreviation;
                         });
                     });
-                    this.menuBar.getWrappedInstance().clearSearch();
                     this.props.setRecipe(response.data);
+                    const href = response.data._links.self.href;
+                    const match = href.match(/\d+$/) || ['null'];
+                    recipes(this.props.history, match[0]);
                 });
             });
         };
     }
 
-    onSearchInput = (event) => {
-        const filter = event.currentTarget.value;
+    onSearchValueChange = (string) => {
         const filteredList = this.recipeListItems
-            .filter(item => item.recipeView.title.toLowerCase().indexOf(filter.toLowerCase()) !== -1);
+            .filter(item => item.recipeView.title.toLowerCase().indexOf(string.toLowerCase()) !== -1);
 
         this.props.setRecipeListView(filteredList);
     };
 
     render() {
-        const showingRecipe = (bool) => bool ? "" : "d-none";
         return (
             <div>
-                <MenuBar ref={input => this.menuBar = input}
-                         onInput={this.onSearchInput}/>
+                <MenuBar onChange={this.onSearchValueChange}/>
                 <Container>
-                    <RecipeList ref={input => this.recipeViewList = input}
-                                className={showingRecipe(Boolean(!this.props.recipe))}/>
-                    <RecipePage ref={input => this.recipePage = input}
-                                className={showingRecipe(Boolean(this.props.recipe))}/>
+                    <Route exact path={home()} component={RecipeList}/>
+                    <Route path={recipes()} component={RecipePage}/>
                 </Container>
             </div>
         );
     }
 }
 
-export default connect(
+export default withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(App);
+)(App));
