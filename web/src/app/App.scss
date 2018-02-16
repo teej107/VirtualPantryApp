@@ -1,10 +1,9 @@
-$md-height: 405px;
-$md-width: 720px;
-$sm-height: 304px;
-$sm-width: 540px;
-
 body {
   padding-bottom: 30px;
+}
+
+#root {
+  overflow-x: hidden;
 }
 
 .iframe-container {
@@ -24,10 +23,6 @@ body {
     top: 0;
     width: 100%;
   }
-}
-
-.editable-component > * {
-  margin: 0;
 }
 
 .recipe-page {
@@ -58,6 +53,26 @@ body {
 .shadow-bottom {
   box-shadow: 0 4px 2px -2px lightgray;
   margin-bottom: 8px;
+}
+
+.input-group-prepend > span {
+  width: 90px;
+}
+
+.max-width-90 {
+  max-width: 90px;
+}
+
+.min-width-70px {
+  min-width: 70px;
+}
+
+.min-width-185px {
+  min-width: 185px;
+}
+
+.touch-action-none {
+  touch-action: none
 }
 
 @media print {

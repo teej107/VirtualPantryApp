@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {withRouter, Link} from 'react-router-dom';
 import {connect} from 'react-redux';
 import {setMenuBarCollapsed} from "../redux/reducer/menuBarReducer";
-import {home} from '../data/History';
+import {home, newRecipe} from '../data/History';
 import {
     Container,
     Navbar,
@@ -56,20 +56,19 @@ class MenuBar extends Component {
         this.setSearchValue(event.currentTarget.value);
     };
 
-    handleClick = () => {
-        home(this.props.history);
-    };
-
     render() {
         return (
             <Navbar color="light" expand="md" light className="shadow-bottom">
                 <Container>
-                    <NavbarBrand onClick={this.handleClick}>Virtual Pantry</NavbarBrand>
+                    <Link to={home.pathname} className="navbar-brand">Virtual Pantry</Link>
                     <NavbarToggler onClick={this.props.setCollapsed.bind(null, !this.props.collapsed)}/>
                     <Collapse isOpen={!this.props.collapsed} navbar>
                         <Nav navbar>
                             <NavItem>
-                                <Link to={home()} className="nav-link my-0">Recipes</Link>
+                                <Link to={home.pathname} className="nav-link my-0">Recipes</Link>
+                            </NavItem>
+                            <NavItem>
+                                <Link to={newRecipe.pathname} className="nav-link my-0">New</Link>
                             </NavItem>
                         </Nav>
                         <Nav navbar className="ml-auto">

@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import RecipeListItem from './RecipeListItem';
 import {Row} from 'reactstrap';
 import {connect} from 'react-redux';
-import {toClassName} from '../app/Utilities';
 
 const mapStateToProps = (store, props) => {
     return {
@@ -22,7 +21,7 @@ class RecipeList extends Component {
         });
 
         return (
-            <Row className={toClassName(this.props.className)}>
+            <Row>
                 {children}
             </Row>
         );
