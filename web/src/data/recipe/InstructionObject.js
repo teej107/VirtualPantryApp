@@ -1,10 +1,11 @@
 export default class InstructionObject {
-    constructor(description, images) {
+    constructor(index, description, images) {
+        if (typeof index !== 'number')
+            throw new TypeError("index not a number");
+
+        this.index = index;
         this.description = description;
         this.images = images instanceof Array || [];
-
-        Object.defineProperty(this, 'key', {
-            value: Math.random()
-        })
+        this.key = Math.random();
     }
 }

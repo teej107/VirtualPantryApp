@@ -16,15 +16,8 @@ const mapStateToProps = (store, props) => {
 class RecipePage extends Component {
 
     render() {
-        const ingredients = (this.props.ingredients || []).map(ingredient => (
-            <Ingredient key={Math.random()} {...ingredient}/>
-        ));
-
-        const instructions = (this.props.instructions || []).map((instruction, i) => (
-            <Instruction key={instruction.description}
-                         description={instruction.description}
-                         index={i}/>
-        ));
+        const ingredients = (this.props.ingredients || []).map(ingredient => <Ingredient {...ingredient}/>);
+        const instructions = (this.props.instructions || []).map(instruction => <Instruction {...instruction}/>);
 
         return (
             <div ref={ref => this.parent = ref} className='recipe-page mx-auto'>
@@ -33,17 +26,20 @@ class RecipePage extends Component {
                     <Col className="col-lg-8 col-md-10 col-sm-12 mx-auto">
                         <img src={this.props.image} alt={this.props.title}/>
                         <div className="iframe-container mt-1">
-                            <iframe src={this.props.video} allowFullScreen/>
+                            <iframe src={this.props.video} title="Video" allowFullScreen/>
                         </div>
                     </Col>
                 </Row>
-                <div className="mt-2 mt-sm-4">
+                <hr/>
+                <div>
                     <h2>Description</h2>
                     <p>{this.props.description}</p>
+                    <hr/>
                     <h2 className="mt-1">Ingredients</h2>
                     <ul className="list-group">
                         {ingredients}
                     </ul>
+                    <hr/>
                     <h2 className="mt-1">Instructions</h2>
                     <ol className="list-group">
                         {instructions}

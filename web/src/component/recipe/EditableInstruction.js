@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Input, FormGroup} from 'reactstrap';
 
 export default class EditableInstruction extends Component {
 
@@ -26,7 +25,7 @@ export default class EditableInstruction extends Component {
             <li className={`list-group-item ${this.animation}`}>
                 <span>
                     {this.props.dragHandle(<span className="fa fa-bars pr-3 touch-action-none">&nbsp;</span>)}
-                    <textarea className="form-control"/>
+                    <textarea className="form-control" value={this.state.description} onChange={this.onChange}/>
                 </span>
             </li>
         );

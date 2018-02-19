@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Col, Input, InputGroup, InputGroupAddon, Row, Button} from "reactstrap";
+import {Col, Row, Button} from "reactstrap";
 import {connect} from 'react-redux';
 import IngredientObject from "../../data/recipe/IngredientObject";
 import EditableInstruction from "./EditableInstruction";
@@ -7,8 +7,7 @@ import EditableIngredient from "./EditableIngredient";
 import InstructionObject from "../../data/recipe/InstructionObject";
 import DraggableList from 'react-draggable-list';
 import ListHeader from '../ListHeader';
-
-const COL_CLASS_NAME = "col-lg-8 col-md-10 col-sm-12 mx-auto";
+import InputRow from '../InputRow';
 
 const mapStateToProps = (store, props) => {
     return {
@@ -23,12 +22,13 @@ class EditRecipePage extends Component {
         super(props);
         this.state = {
             ingredients: this.props.recipe ? this.props.recipe.ingredients : [],
-            instructions: this.props.recipe ? this.props.recipe.instructions : []
+            instructions: this.props.recipe ? this.props.recipe.instructions : [],
+            description: this.props.recipe ? this.props.recipe.description : ""
         };
     }
 
     onInstructionsClick = () => {
-        this.state.instructions.push(new InstructionObject());
+        this.state.instructions.push(new InstructionObject(this.state.instructions.length));
         this.setState(this.state);
     };
 
@@ -38,58 +38,43 @@ class EditRecipePage extends Component {
     };
 
     onIngredientsMoveEnd = (newList) => {
-        this.state.ingredients = newList;
+        this.setState({ingredients: newList});
     };
 
     onInstructionsMoveEnd = (newList) => {
-        this.state.instructions = newList;
+        this.setState({instructions: newList});
+        newList.forEach((item, i) => item.index = i);
+    };
+
+    onDescriptionChange = (event) => {
+        this.setState({
+            description: event.currentTarget.value
+        });
     };
 
     render() {
 
+        const {title, image, video} = this.props.recipe || {};
+
         return (
             <div>
-                <Row className="pb-2">
-                    <Col className={COL_CLASS_NAME}>
-                        <InputGroup size="lg">
-                            <InputGroupAddon className="input-group-prepend">
-                                <span className="input-group-text text-center">Title</span>
-                            </InputGroupAddon>
-                            <Input/>
-                        </InputGroup>
-                    </Col>
-                </Row>
-                <Row className="pb-2">
-                    <Col className={COL_CLASS_NAME}>
-                        <InputGroup size="lg">
-                            <InputGroupAddon className="input-group-prepend">
-                                <span className="input-group-text text-center">Image</span>
-                            </InputGroupAddon>
-                            <Input placeholder="URL"/>
-                        </InputGroup>
-                    </Col>
-                </Row>
-                <Row className="pb-2">
-                    <Col className={COL_CLASS_NAME}>
-                        <InputGroup size="lg">
-                            <InputGroupAddon className="input-group-prepend">
-                                <span className="input-group-text text-center">Video</span>
-                            </InputGroupAddon>
-                            <Input placeholder="Embed URL"/>
-                        </InputGroup>
-                    </Col>
-                </Row>
+                <InputRow title="Title" value={title}/>
+                <InputRow title="Image" placeholder="URL" value={image}/>
+                <InputRow title="Video" placeholder="Embed URL" value={video}/>
+                <hr/>
                 <Row>
                     <Col>
                         <h2>Description</h2>
-                        <textarea className="form-control"/>
+                        <textarea className="form-control"
+                                  value={this.state.description}
+                                  onChange={this.onDescriptionChange}/>
+                        <hr/>
                         <ListHeader title="Ingredients" onClick={this.onIngredientsClick}/>
-                        <DraggableList ref={input => this.ingredientsList = input}
-                                       list={this.state.ingredients}
+                        <DraggableList list={this.state.ingredients}
                                        itemKey="key"
                                        template={EditableIngredient}
                                        onMoveEnd={this.onIngredientsMoveEnd}/>
-                        <hr className={this.state.ingredients.length === 0 ? "" : "d-none"}/>
+                        <hr/>
                         <ListHeader title="Instructions" onClick={this.onInstructionsClick}/>
                         <DraggableList list={this.state.instructions}
                                        itemKey="key"
@@ -97,7 +82,8 @@ class EditRecipePage extends Component {
                                        onMoveEnd={this.onInstructionsMoveEnd}/>
                     </Col>
                 </Row>
-                <Row className="mt-5">
+                <hr/>
+                <Row className="mt-5 mb-1">
                     <Col>
                         <Button color="success" outline>Save</Button>
                     </Col>

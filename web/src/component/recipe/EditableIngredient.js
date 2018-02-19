@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
-import {Input, Button, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, Form} from 'reactstrap';
+import {Input, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem, Form} from 'reactstrap';
 import {connect} from 'react-redux';
+import MeasurementObject from "../../data/recipe/MeasurementObject";
+
+const AMOUNT_REGEX = /^(\d+( \d+\/\d+)?)$|^(\d+\/\d+)$/;
 
 const mapStateToProps = (store, props) => {
     return {
@@ -14,13 +17,14 @@ class EditableIngredient extends Component {
 
     constructor(props) {
         super(props);
+        this.timeout = null;
         this.animation = "animated slideInRight";
         this.state = {
             amount: props.item.amount,
-            measurement: props.item.measurement,
+            amountClassName: "",
             name: props.item.name,
             dropdownOpen: false,
-            selectedMeasurement: "Measurement"
+            selectedMeasurement: props.item.measurement
         };
     }
 
@@ -37,18 +41,31 @@ class EditableIngredient extends Component {
         });
     };
 
-    onChange = (stateProp) => {
-        return (event) => {
-            this.setState({
-                [stateProp]: event.currentTarget.value
-            });
-        };
+    onNameChange = (event) => {
+        this.setState({
+            name: event.currentTarget.value
+        });
+    };
+
+    onAmountChange = (event) => {
+        const value = event.currentTarget.value;
+        this.setState({
+            amount: value,
+            amountClassName: AMOUNT_REGEX.test(value) ? "" : "border border-danger shadow-danger"
+        });
     };
 
     onMeasurementSelected = (measurement) => {
         this.setState({
-            selectedMeasurement: measurement.abbreviation
+            selectedMeasurement: measurement
         });
+    };
+
+    getMeasurementString = () => {
+        if (this.state.selectedMeasurement instanceof MeasurementObject) {
+            return this.state.selectedMeasurement.abbreviation;
+        }
+        return "Unit";
     };
 
     render() {
@@ -71,16 +88,19 @@ class EditableIngredient extends Component {
                 <span>
                     {this.props.dragHandle(<span className="fa fa-bars pr-3 touch-action-none">&nbsp;</span>)}
                     <Form className="d-inline" inline>
-                        <Input className="max-width-90 mr-md-1" step="0.125" type="number" value={this.state.amount}
-                               onChange={this.onChange("amount")}/>
-                        <ButtonDropdown className="mr-md-1" isOpen={this.state.dropdownOpen}
+                        <Input className={`max-width-90px mr-md-1 ${this.state.amountClassName}`}
+                               value={this.state.amount}
+                               onChange={this.onAmountChange}/>
+                        <ButtonDropdown className="mr-md-1"
+                                        isOpen={this.state.dropdownOpen}
                                         toggle={this.toggleDropdown}>
-                            <DropdownToggle className="min-width-70px" caret>{this.state.selectedMeasurement}</DropdownToggle>
+                            <DropdownToggle className="min-width-70px"
+                                            caret>{this.getMeasurementString()}</DropdownToggle>
                             <DropdownMenu>
                                 {dropdownMeasurements}
                             </DropdownMenu>
                         </ButtonDropdown>
-                        <Input type="text" value={this.state.name} onChange={this.onChange("name")}/>
+                        <Input value={this.state.name} onChange={this.onNameChange}/>
                     </Form>
                 </span>
             </li>

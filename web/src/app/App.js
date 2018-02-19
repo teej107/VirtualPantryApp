@@ -13,7 +13,7 @@ import axios from 'axios';
 import EditRecipePage from "../component/recipe/EditableRecipePage";
 import MeasurementObject from '../data/recipe/MeasurementObject';
 import IngredientObject from '../data/recipe/IngredientObject';
-import InstructionObject from '../data/recipe/IngredientObject';
+import InstructionObject from '../data/recipe/InstructionObject';
 
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -26,11 +26,6 @@ const CONFIG = {
 };
 
 const REQUEST = axios.create(CONFIG);
-const TRANSFORM_RESPONSE = (...callbacks) => {
-    return {
-        transformResponse: CONFIG.transformResponse.concat(callbacks)
-    };
-};
 
 const mapStateToProps = (store, props) => {
     return {
@@ -131,8 +126,8 @@ class App extends Component {
             recipe.ingredients = recipe.ingredients.map(ingredient => {
                 return new IngredientObject(ingredient, this.props.measurements[ingredient._links.measurement.href]);
             });
-            recipe.instructions = recipe.instructions.map(instruction => {
-                return new InstructionObject(instruction.description, instruction.images);
+            recipe.instructions = recipe.instructions.map((instruction, index) => {
+                return new InstructionObject(index, instruction.description, instruction.images);
             });
             callback(recipe);
         });

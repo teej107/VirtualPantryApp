@@ -1,5 +1,5 @@
 export const home = Object.freeze({
-    regex: '/\//',
+    regex: /\//,
     pathname: '/',
     title: () => 'Virtual Pantry',
     push: (history) => history.push(this.pathname)
