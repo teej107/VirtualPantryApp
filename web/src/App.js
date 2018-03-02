@@ -1,19 +1,20 @@
 import React, {Component} from 'react';
 import {withRouter, Route, Switch} from 'react-router-dom';
-import RecipePage from "../component/recipe/RecipePage";
-import MenuBar from '../component/MenuBar';
-import RecipeList from '../component/RecipeList';
+import RecipePage from "./component/recipe/RecipePage";
+import MenuBar from './component/MenuBar';
+import RecipeList from './component/RecipeList';
 import {Container} from 'reactstrap';
 import {connect} from 'react-redux';
-import {setRecipe, editRecipe} from "../redux/reducer/recipeReducer";
-import {home, recipes, newRecipe} from '../data/History';
-import {setRecipeListItems} from "../redux/reducer/recipeListViewReducer";
-import {setMeasurements} from "../redux/reducer/measurementReducer";
+import {setRecipe, editRecipe} from "./redux/reducer/recipeReducer";
+import {home, recipes, newRecipe} from './data/History';
+import {setRecipeListItems} from "./redux/reducer/recipeListViewReducer";
+import {setMeasurements} from "./redux/reducer/measurementReducer";
 import axios from 'axios';
-import EditRecipePage from "../component/recipe/EditableRecipePage";
-import MeasurementObject from '../data/recipe/MeasurementObject';
-import IngredientObject from '../data/recipe/IngredientObject';
-import InstructionObject from '../data/recipe/InstructionObject';
+import EditRecipePage from "./component/recipe/EditableRecipePage";
+import MeasurementObject from './data/recipe/MeasurementObject';
+import IngredientObject from './data/recipe/IngredientObject';
+import InstructionObject from './data/recipe/InstructionObject';
+import Request from './data/Request';
 
 import 'font-awesome/css/font-awesome.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -81,14 +82,14 @@ class App extends Component {
         else if (this.props.history.location.pathname.match(recipes.regex))
             initStack.push(this.fetchRecipe.bind(this, this.props.history.location.pathname, this.viewRecipe));
 
-        this.fetchMeasurements(initMeasurements);
+        Request.fetchMeasurements(initMeasurements);
     }
 
     componentWillUnmount() {
         this.unlisten();
     }
 
-    fetchMeasurements(callback) {
+/*    fetchMeasurements(callback) {
         REQUEST.get('measurements')
             .then(response => response.data._embedded.measurements)
             .then(measurements => {
@@ -99,7 +100,7 @@ class App extends Component {
                 }, {});
                 callback(measurementTable);
             });
-    }
+    }*/
 
     fetchRecipeList(callback) {
         REQUEST.get('recipelist', {
